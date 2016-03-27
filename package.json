@@ -7,5 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Martin Sörensson",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/msorensson/prllx.git"
+  },
+  "dependencies": {
+    "jquery-mousewheel": "^3.1.13",
+    "underscore": "^1.8.3"
+  }
 }
