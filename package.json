@@ -13,6 +13,7 @@
     "url": "https://github.com/msorensson/prllx.git"
   },
   "dependencies": {
+    "jquery": "^2.2.2",
     "jquery-mousewheel": "^3.1.13",
     "underscore": "^1.8.3"
   }
