@@ -1,14 +1,14 @@
+'use strict';
 var $ = require('jquery');
+
 module.exports  = function() {
     var self = this;
 
-    $('body').addClass('parallax');
+    $('body').addClass('prllx');
     $('body, html').scrollTop(0);
 
     self.resize();
     self.setScrollLimit();
-
-    self.resetAnimations();
 
     if (self.options.onBeforeStart) {
         self.options.onBeforeStart();
@@ -18,16 +18,8 @@ module.exports  = function() {
         self.start();
     }
 
-    if (self.options.scroll) {
-        $(window).on('scroll', function() {
-            var scrollTop = $(window).scrollTop();
-            self.setScrollTop(scrollTop);
-        });
-    } else {
-        self.mousewheel();
-        self.touch();
-        self.keyboard();
-    }
+    self.addControls();
+    self.resetAnimations();
 
     self.loop();
 };
