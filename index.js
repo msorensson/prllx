@@ -1,9 +1,10 @@
 'use strict';
 var $ = require('jquery');
 
-var Scroll = function($el, animations, options) {
+var Prllx = function($el, animations, options) {
     var self = this;
 
+    self.wWidth = $(window).width();
     self.$el = $el;
     self.scrollTop = 0;
     self.scrollDirection = 0;
@@ -11,6 +12,8 @@ var Scroll = function($el, animations, options) {
     self.animations = [];
     self.animationsOrigin = animations || [];
     self.targets = {};
+
+    self.initialized = false;
 
     self.options = $.extend({}, self.defaults, options);
 
@@ -20,11 +23,12 @@ var Scroll = function($el, animations, options) {
     self.initialize();
 };
 
-Scroll.prototype = {
+Prllx.prototype = {
     tick: 0,
     defaults: {
         autoStart: true,
-        translateZ: true
+        translateZ: true,
+        itemClass: 'prllx__item'
     },
     utils: require('./utils'),
     setAnimation: require('./setAnimation'),
@@ -33,21 +37,22 @@ Scroll.prototype = {
     animate: require('./animate'),
     initialize: require('./initialize'),
     start: require('./start'),
+    stop: require('./stop'),
     loop: require('./loop'),
+    scroll: require('./scroll'),
     mousewheel: require('./mousewheel'),
     touch: require('./touch'),
     keyboard: require('./keyboard'),
+    addControls: require('./addControls'),
     resize: require('./resize'),
     setScrollTop: require('./setScrollTop'),
     setScrollLimit: require('./setScrollLimit'),
     jump: require('./jump')
 };
 
-require('./requestAnimationFrame');
-
-$.fn.scroll = function(animations, opts) {
+$.fn.prllx = function(animations, opts) {
     var $this = $(this);
-    var scroll = new Scroll($this, animations, opts);
+    var scroll = new Prllx($this, animations, opts);
 };
 
-module.exports = Scroll;
+module.exports = Prllx;
