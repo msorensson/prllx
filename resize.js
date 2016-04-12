@@ -1,5 +1,6 @@
+'use strict';
 var $ = require('jquery');
-var _ = require('underscore');
+var debounce = require('lodash/debounce');
 
 module.exports = function() {
     var self = this,
@@ -16,6 +17,8 @@ module.exports = function() {
         }
         self.stop();
 
+        self.wWidth = $(window).width();
+
         if (self.options.onBeforeResize) {
             self.options.onBeforeResize();
         }
@@ -31,6 +34,6 @@ module.exports = function() {
     }
 
     $(window)
-        .on('resize', _.debounce(beforeWindowResize, 200, true))
-        .on('resize', _.debounce(afterWindowResize, 300));
+        .on('resize', debounce(beforeWindowResize, 200, {}, true))
+        .on('resize', debounce(afterWindowResize, 300));
 };
