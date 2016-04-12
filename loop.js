@@ -1,102 +1,107 @@
-module.exports = function() {
+'use strict';
+var raf = require('raf');
+
+var lastY,
+    current,
+    direction,
+    scrollDirection,
+    paused = false;
+
+var getScrollDirection = function(newScrollTop, currentScrollTop) {
+    if (newScrollTop > currentScrollTop) {
+        return 'down';
+    } else if (newScrollTop < currentScrollTop) {
+        return 'up';
+    }
+    return false;
+};
+
+var loop = function() {
     var self = this;
-    var lastY = self.scrollTop,
-        current,
-        direction;
+    var scrollTop;
 
-    function loop() {
-        requestAnimationFrame(loop);
+    if (self.scrollTop === lastY) {
+        paused = true;
+    } else {
+        paused = false;
+    }
 
-        if (self.scrollDirection === 1 && self.tick < self.scrollTop) {
-            self.tick = self.tick + 15;
-        } else if (self.scrollDirection === -1 && self.tick > self.scrollTop) {
-            self.tick = self.tick - 15;
+    scrollDirection = getScrollDirection(self.scrollTop, lastY);
+    lastY = self.scrollTop;
+
+    for (var i = 0, len = self.animations.length; i < len; i++) {
+        current = self.animations[i];
+
+        if (current.start <= self.scrollTop &&
+            current.end >= self.scrollTop) {
+            self.animate(current);
         }
 
-        if (lastY === self.scrollTop) {
-            return;
-        } else {
-            if (self.options.onScroll && typeof self.options.onScroll === 'function') {
-                self.options.onScroll.call(this, (self.scrollDirection === 1) ? 'down' : 'up', self.scrollTop);
+        if (scrollDirection === 'down') {
+            // Mark active on way down.
+            if (current.start <= self.scrollTop &&
+                current.end > self.scrollTop &&
+                !current.active) {
+
+                current.active = true;
+                current.atStart = false;
+
+                if (typeof current.onStart === 'function') {
+                    current.onStart.call(this, scrollDirection);
+                }
             }
 
-            lastY = self.scrollTop;
+            // Unmark active on way down.
+            if (current.end <= self.scrollTop &&
+                !current.atEnd) {
+
+                self.animate(current, 1);
+                current.active = false;
+                current.atStart = false;
+                current.atEnd = true;
+
+                if (typeof current.onEnd === 'function') {
+                    current.onEnd.call(this, scrollDirection);
+                }
+            }
         }
 
-        for (var i = 0, len = self.animations.length; i < len; i++) {
-            current = self.animations[i];
+        if (scrollDirection === 'up') {
+            // Mark as active on way up.
+            if (current.end >= self.scrollTop &&
+                current.start < self.scrollTop &&
+                !current.active) {
 
-            if (current.start <= self.tick &&
-                current.end >= self.tick) {
-                self.animate(current);
-            }
+                current.active = true;
+                current.atEnd = false;
+                current.atStart = false;
 
-            if (self.scrollDirection === 1) {
-                // Mark active on way down.
-                if (current.start <= self.tick &&
-                    current.end > self.tick &&
-                    !current.active) {
-
-                    direction = 'down';
-
-                    if (typeof current.onStart === 'function') {
-                        current.onStart.call(this, direction);
-                    }
-
-                    current.active = true;
-                }
-
-                // Unmark active on way down.
-                if (current.end <= self.tick &&
-                    current.active) {
-
-                    direction = 'down';
-
-                    if (typeof current.onEnd === 'function') {
-                        current.onEnd.call(this, direction);
-                    }
-
-                    self.animate(current, 1);
-                    current.active = false;
+                if (typeof current.onStart === 'function') {
+                    current.onStart.call(this, scrollDirection);
                 }
             }
 
-            if (self.scrollDirection === -1) {
-                // Mark as active on way up.
-                if (current.end >= self.tick &&
-                    current.start < self.tick &&
-                    !current.active) {
+            // Unmark active on way up.
+            if (current.start >= self.scrollTop && !current.atStart) {
 
-                    direction = 'up';
+                self.animate(current, 0);
+                current.active = false;
+                current.atStart = true;
+                current.atEnd = false;
 
-                    if (typeof current.onStart === 'function') {
-                        current.onStart.call(this, direction);
-                    }
-
-                    current.active = true;
-                }
-
-                // Unmark active on way up.
-                if (current.start >= self.tick &&
-                    current.active) {
-
-                    direction = 'up';
-
-                    if (typeof current.onEnd === 'function') {
-                        current.onEnd.call(this, direction);
-                    }
-
-                    self.animate(current, 0);
-
-                    current.active = false;
+                if (typeof current.onEnd === 'function') {
+                    current.onEnd.call(this, scrollDirection);
                 }
             }
+        }
 
-            if (typeof current.onScroll === 'function') {
-                current.onScroll.call(this, direction);
-            }
+        if (typeof current.onScroll === 'function') {
+            current.onScroll.call(current, scrollDirection, self.scrollTop);
         }
     }
 
-    requestAnimationFrame(loop);
+    lastY = self.scrollTop;
+    raf(function() { self.loop(); });
 };
+
+module.exports = loop;
