@@ -5,4 +5,8 @@ module.exports = function() {
     for (var i = 0; i < self.animationsOrigin.length; i++) {
         self.setAnimation(self.animationsOrigin[i], null, true);
     }
+
+    if (!self.initialized) {
+        self.initialized = true;
+    }
 };
