@@ -1,4 +1,11 @@
-//var Scroll = require('./Scroll');
+'use strict';
+function addItemClass(el, self) {
+    if (el.nodeType) {
+//        el.classList.add(self.options.itemClass);
+    } else {
+        el.addClass(self.options.itemClass);
+    }
+}
 
 module.exports = function(animation, index, update) {
     var self = this,
@@ -13,8 +20,12 @@ module.exports = function(animation, index, update) {
 
     newAnimation.$el = animation.$el;
 
-    if (animation.transitions && self.options.translateZ) {
-        animation.$el.css('transform', 'translateZ(0)');
+    if (!self.initialized) {
+        addItemClass(newAnimation.$el, self);
+    }
+
+    if (animation.breakpoint && animation.breakpoint > self.wWidth) {
+        return;
     }
 
     if (animation.anchor) {
