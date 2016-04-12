@@ -1,36 +1,73 @@
-var Scroll = require('./Scroll');
+'use strict';
+var progress,
+    vendorPrefixes = ['-webkit', '-moz', '-ms'],
+    vendorPrefixedCssProperties = ['transform'];
 
-module.exports = function(animation, prog) {
+var getProgress = function(current, scrollTop) {
+
+    var progress = (current.start - scrollTop) / (current.start - current.end);
+
+    // if (animation.hasOwnProperty('easing') &&
+    //     self.ease.hasOwnProperty(animation.easing)) {
+    //     progress = self.ease[animation.easing](null, progress, 0, 1, 1);
+    // }
+
+    return progress;
+};
+
+var applyCss = function(el, css) {
+    for (var key in css) {
+        el.style[key] = css[key];
+
+        if (vendorPrefixedCssProperties.indexOf(key) !== -1) {
+            for (var k = 0; k < vendorPrefixes.length; k++) {
+                el.style[vendorPrefixes[k]] = css[key];
+            }
+        }
+    };
+};
+
+var animate = function(current, prog) {
     var self = this,
-        styles = {},
         progress,
-        translateZ = 'translateZ(0) ',
-        now, start, end, unit;
+        start,
+        end,
+        now,
+        unit,
+        styles = {},
+        translateZ = '', //'translateZ(0)',
+        translate3dObj = {
+            x: 0,
+            y: 0,
+            z: 0
+        },
+        translate3d,
+        transform3d = false;
 
-    progress = (typeof prog === 'undefined') ? self.utils.getProgress(animation, self.tick) : prog;
+    progress = (typeof prog === 'undefined') ? getProgress(current, self.scrollTop) : prog;
 
-    for (var key in animation.transitions) {
-        if (animation.transitions.hasOwnProperty(key)) {
-            start = animation.transitions[key][0];
-            end = animation.transitions[key][1];
+    for (var key in current.transitions) {
+        if (current.transitions.hasOwnProperty(key)) {
+            start = current.transitions[key][0];
+            end = current.transitions[key][1];
             now = start + ((end - start) * progress);
             unit = 'px';
 
-            if (animation.transitions[key][2]) {
-                unit = animation.transitions[key][2];
+            if (current.transitions[key][2]) {
+                unit = current.transitions[key][2];
             }
 
             switch (key) {
             case 'translateX':
                 now = (unit === 'px') ? Math.round(now) : Math.round(now * 100) / 100;
-                styles.transform = styles.transform || '';
-                styles.transform += 'translateX(' + now + unit + ') ' + translateZ;
+                translate3dObj.x = now + unit;
+                transform3d = true;
                 break;
 
             case 'translateY':
                 now = (unit === 'px') ? Math.round(now) : Math.round(now * 100) / 100;
-                styles.transform = styles.transform || '';
-                styles.transform += 'translateY(' + now + unit + ') ' + translateZ;
+                translate3dObj.y = now + unit;
+                transform3d = true;
                 break;
 
             case 'scale':
@@ -55,9 +92,19 @@ module.exports = function(animation, prog) {
         }
     }
 
-    if (styles.transform) {
-        styles.transform = styles.transform.substring(0, styles.transform.length - 1);
+    if (transform3d) {
+        styles.transform = styles.transform || '';
+        translate3d = 'translate3d(' + translate3dObj.x + ',' + translate3dObj.y + ',' + translate3dObj.z + ') ';
+        styles.transform = styles.transform + translate3d;
     }
 
-    animation.$el.css(styles);
-}
+    if (styles.transform) {
+        styles.transform = styles.transform.substring(0, styles.transform.length - 1);
+//        styles['-webkit-transform'] = styles.transform; //styles.transform.substring(0, styles.transform.length - 1);
+    }
+
+    applyCss(current.$el[0], styles);
+//    current.$el.css(styles);
+};
+
+module.exports = animate;
