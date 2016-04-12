@@ -1,5 +1,7 @@
 'use strict';
+/* global window */
 var $ = require('jquery');
+var prllx;
 
 var Prllx = function($el, animations, options) {
     var self = this;
@@ -52,7 +54,7 @@ Prllx.prototype = {
 
 $.fn.prllx = function(animations, opts) {
     var $this = $(this);
-    var scroll = new Prllx($this, animations, opts);
+    prllx = new Prllx($this, animations, opts);
 };
 
 module.exports = Prllx;

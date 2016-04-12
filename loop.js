@@ -3,7 +3,6 @@ var raf = require('raf');
 
 var lastY,
     current,
-    direction,
     scrollDirection,
     paused = false;
 
@@ -18,7 +17,6 @@ var getScrollDirection = function(newScrollTop, currentScrollTop) {
 
 var loop = function() {
     var self = this;
-    var scrollTop;
 
     if (self.scrollTop === lastY) {
         paused = true;

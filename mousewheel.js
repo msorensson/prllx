@@ -1,9 +1,10 @@
+'use strict';
 var $ = require('jquery');
 require('jquery-mousewheel')($);
 
 module.exports = function() {
     var self = this,
-        scrollSpeed = .5;
+        scrollSpeed = 0.5;
 
     function onMouseWheel(e) {
         var delta;

@@ -1,4 +1,5 @@
 'use strict';
+/* jshint ignore:start */
 module.exports = {
     getTime: Date.now || function getTime() { return new Date().getTime(); },
 

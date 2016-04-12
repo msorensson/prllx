@@ -1,5 +1,4 @@
-//var Scroll = require('./Scroll');
-
+'use strict';
 module.exports = function(newScrollTop) {
     var self = this;
 

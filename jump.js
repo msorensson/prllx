@@ -1,3 +1,4 @@
+'use strict';
 module.exports = function(target) {
     var self = this;
     var delta = 20;

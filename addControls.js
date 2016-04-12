@@ -1,6 +1,4 @@
 'use strict';
-var $ = require('jquery');
-
 module.exports  = function() {
     var self = this;
 

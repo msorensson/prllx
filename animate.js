@@ -1,6 +1,5 @@
 'use strict';
-var progress,
-    vendorPrefixes = ['-webkit', '-moz', '-ms'],
+var vendorPrefixes = ['-webkit', '-moz', '-ms'],
     vendorPrefixedCssProperties = ['transform'];
 
 var getProgress = function(current, scrollTop) {
@@ -24,7 +23,7 @@ var applyCss = function(el, css) {
                 el.style[vendorPrefixes[k]] = css[key];
             }
         }
-    };
+    }
 };
 
 var animate = function(current, prog) {

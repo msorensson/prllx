@@ -1,4 +1,5 @@
 'use strict';
+/* global window */
 var $ = require('jquery');
 var $window = $(window);
 
