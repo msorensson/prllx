@@ -1,22 +1,13 @@
+'use strict';
 var $ = require('jquery');
+var $window = $(window);
 
-var Scroll = function($el, options) {
+module.exports = function() {
     var self = this;
 
-    self.$el = $el;
-    self.scrollTop = 0;
-    self.scrollDirection = 0;
-    self.isStarted = false;
-    self.animations = [];
-    self.animationsOrigin = [];
-    self.targets = {};
-
-    self.options = $.extend({}, self.defaults, options);
-
-    if (self.options.onBeforeResize && typeof self.options.onBeforeResize === 'function') {
-        self.onBeforeResize = self.options.onBeforeResize;
-    }
-    self.initialize();
+    $window.on('scroll', function() {
+        var scrollTop = $window.scrollTop();
+        var delta = self.scrollTop - scrollTop;
+        self.setScrollTop(delta);
+    });
 };
-
-module.exports = Scroll;
