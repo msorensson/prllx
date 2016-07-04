@@ -80,7 +80,7 @@ var loop = function() {
             }
 
             // Unmark active on way up.
-            if (current.start >= self.scrollTop && !current.atStart) {
+            if (current.start >= self.scrollTop && !current.atStart && current.active) {
 
                 self.animate(current, 0);
                 current.active = false;
