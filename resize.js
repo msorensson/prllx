@@ -1,15 +1,13 @@
 'use strict';
-/* global window */
-var $ = require('jquery');
+require('classlist-polyfill');
 var debounce = require('lodash/debounce');
 
 module.exports = function() {
     var self = this,
-        $body = $('body'),
         waitForStart = false;
 
     function beforeWindowResize() {
-        $body.addClass('resizing');
+        document.body.classList.add('resizing');
     }
 
     function afterWindowResize() {
@@ -18,7 +16,7 @@ module.exports = function() {
         }
         self.stop();
 
-        self.wWidth = $(window).width();
+        self.wWidth = window.innerWidth;
 
         if (self.options.onBeforeResize) {
             self.options.onBeforeResize();
@@ -27,14 +25,13 @@ module.exports = function() {
         self.resetAnimations();
         self.setScrollLimit();
 
-        $body.removeClass('resizing');
+        document.body.classList.remove('resizing');
 
         if (!waitForStart) {
             self.start();
         }
     }
 
-    $(window)
-        .on('resize', debounce(beforeWindowResize, 200, {}, true))
-        .on('resize', debounce(afterWindowResize, 300));
+    window.addEventListener('resize', debounce(beforeWindowResize, 200, {}, true));
+    window.addEventListener('resize', debounce(afterWindowResize, 300));
 };

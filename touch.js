@@ -89,11 +89,11 @@ module.exports = function() {
         velocity = 0.8 * v + 0.2 * velocity;
     }
 
-    self.$el[0].addEventListener('mousedown', tap);
-    self.$el[0].addEventListener('mousemove', drag);
-    self.$el[0].addEventListener('mouseup', release);
+    self.el.addEventListener('mousedown', tap);
+    self.el.addEventListener('mousemove', drag);
+    self.el.addEventListener('mouseup', release);
 
-    self.$el[0].addEventListener('touchstart', tap);
-    self.$el[0].addEventListener('touchmove', drag);
-    self.$el[0].addEventListener('touchend', release);
+    self.el.addEventListener('touchstart', tap);
+    self.el.addEventListener('touchmove', drag);
+    self.el.addEventListener('touchend', release);
 };

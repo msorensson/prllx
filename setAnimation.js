@@ -1,11 +1,5 @@
 'use strict';
-function addItemClass(el, self) {
-    if (el.nodeType) {
-//        el.classList.add(self.options.itemClass);
-    } else {
-        el.addClass(self.options.itemClass);
-    }
-}
+require('classlist-polyfill');
 
 module.exports = function(animation, index, update) {
     var self = this,
@@ -18,10 +12,10 @@ module.exports = function(animation, index, update) {
         self.animationsOrigin.push(animation);
     }
 
-    newAnimation.$el = animation.$el;
+    newAnimation.el = animation.el;
 
     if (!self.initialized) {
-        addItemClass(newAnimation.$el, self);
+        newAnimation.el.classList.add(self.options.itemClass);
     }
 
     if (animation.breakpoint && animation.breakpoint > self.wWidth) {

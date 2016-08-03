@@ -1,6 +1,4 @@
 'use strict';
-var $ = require('jquery');
-
 module.exports = function() {
     var self = this,
         timer,
@@ -30,7 +28,6 @@ module.exports = function() {
         }
     }
 
-    $('body')
-        .on('keydown', onKeyDown)
-        .on('keyup', onKeyUp);
+    document.body.addEventListener('keydown', onKeyDown);
+    document.body.addEventListener('keyup', onKeyUp);
 };

@@ -99,11 +99,9 @@ var animate = function(current, prog) {
 
     if (styles.transform) {
         styles.transform = styles.transform.substring(0, styles.transform.length - 1);
-//        styles['-webkit-transform'] = styles.transform; //styles.transform.substring(0, styles.transform.length - 1);
     }
 
-    applyCss(current.$el[0], styles);
-//    current.$el.css(styles);
+    applyCss(current.el, styles);
 };
 
 module.exports = animate;

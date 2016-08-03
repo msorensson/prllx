@@ -1,11 +1,11 @@
 'use strict';
-var $ = require('jquery');
-
+require('scrollingelement');
+require('classlist-polyfill');
 module.exports  = function() {
     var self = this;
 
-    $('body').addClass('prllx');
-    $('body, html').scrollTop(0);
+    document.body.classList.add('prllx');
+    document.scrollingElement.scrollTop = 0;
 
     self.resize();
     self.setScrollLimit();
@@ -20,6 +20,5 @@ module.exports  = function() {
 
     self.addControls();
     self.resetAnimations();
-
     self.loop();
 };

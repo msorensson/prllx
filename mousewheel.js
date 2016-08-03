@@ -1,20 +1,11 @@
 'use strict';
-var $ = require('jquery');
-require('jquery-mousewheel')($);
+var mousewheel = require('mouse-wheel');
 
 module.exports = function() {
     var self = this,
         scrollSpeed = 0.5;
 
-    function onMouseWheel(e) {
-        var delta;
-
-        // isNaN? Sometimes jquery mousewheel plugin returns 1.
-        if (isNaN(e) && e.hasOwnProperty('deltaY') && e.hasOwnProperty('deltaFactor')) {
-            delta = (e.deltaY * e.deltaFactor) * scrollSpeed;
-            self.setScrollTop(delta);
-        }
-    }
-
-    $('body').on('mousewheel', onMouseWheel);
+    mousewheel(function(dx, dy, dz, ev) {
+        self.setScrollTop(dy * scrollSpeed);
+    });
 };

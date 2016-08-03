@@ -1,13 +1,11 @@
 'use strict';
-/* global window */
-var $ = require('jquery');
-var $window = $(window);
+require('scrollingelement');
 
 module.exports = function() {
     var self = this;
 
-    $window.on('scroll', function() {
-        var scrollTop = $window.scrollTop();
+    window.addEventListener('scroll', function() {
+        var scrollTop = document.scrollingElement.scrollTop;
         var delta = self.scrollTop - scrollTop;
         self.setScrollTop(delta);
     });
